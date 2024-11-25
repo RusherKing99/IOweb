@@ -1,0 +1,121 @@
+<!-- Archivo: index.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Programación Lineal - Inicio</title>
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
+    
+</head>
+<body>
+  <img src="media/Logo.png" id="asdasd">
+    <div class="hero_area">
+        <!-- header section strats -->
+        <header class="header_section">
+          <div class="container-fluid">
+            <nav class="navbar navbar-expand-lg custom_nav-container">
+              <a class="navbar-brand" href="index.html">
+                <img src="images/logo.png" alt="" />
+                <span>
+                  Programacion lineal
+                </span>
+              </a>
+    
+              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav  ">
+              </div>
+              <span class="navbar-brand" id = "cls">
+                Inicio
+              </span>
+            </nav>
+          </div>
+        </header>
+    </div>
+
+    <form id="initial-form">
+        <label for="num_vars">Número de variables:</label>
+        <input type="number" id="num_vars" min="1" required>
+
+        <label for="num_constraints">Número de restricciones:</label>
+        <input type="number" id="num_constraints" min="1" required>
+
+        <label for="optimization">Optimizar:</label>
+        <select id="optimization">
+            <option value="Maximizar">Maximizar</option>
+            <option value="Minimizar">Minimizar</option>
+        </select>
+        <button id = "btnsubmit" type="submit">Siguiente</button>
+    </form>
+
+    <section class="info_section ">
+      <div class="info_container layout_padding-top">
+        <div class="container">
+          <div class="info_top">
+            <div class="info_logo">
+              <span>
+                Informacion del equipo
+              </span>
+            </div>
+          </div>
+  
+          <div class="info_main">
+            <div class="row">
+              <div class="col-md-3 col-lg-3">
+                <div class="info_link-box">
+                  <h5>
+                    Miembros del equipo
+                  </h5>
+                  <ul>
+                    Alvarado Condori Alan Manuel
+                    Balboa Quispe Rusell adolfo
+                    Beizaga Marquez Ricardo Andres
+                    Gomez Ramos Jose Guadalupe
+                    Quispe Mamani Juan Gabriel
+                    Nina Limachi Iván Omar
+
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div class="col-md-3 col-lg-4">
+                <h5>
+                  Titulo
+                </h5>
+                <p>
+                  Uso de investigacion operativa en un sitio web con todas las herramientas incluidas
+                </p>
+              </div>
+  
+              <div class="col-md-3 col-lg-4 offset-lg-1">
+                <h5>
+                  Objetivo
+                </h5>
+                <p>
+                  Desplegar una aplicacion web con funciones de programacion lineal
+                </p>
+              </div>
+            </div>
+          </div>  
+        </div>
+      </div>
+    </section>
+
+    <script>
+        document.getElementById('initial-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const numVars = document.getElementById('num_vars').value;
+            const numConstraints = document.getElementById('num_constraints').value;
+            const optimization = document.getElementById('optimization').value;
+
+            const targetPage = 'input.html?numVars=' + numVars + '&numConstraints=' + numConstraints + '&optimization=' + optimization;
+
+            window.location.href = targetPage;
+        });
+    </script>
+    <script src="js/jquery-3.4.1.min.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/custom.js"></script>
+</body>
+</html>

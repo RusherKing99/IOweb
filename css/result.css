@@ -1,0 +1,82 @@
+/* Archivo: css/result_min.css */
+
+body {
+    font-family: 'Trebuchet MS', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(to right, #000701 10%, #04180c 10%, #04180c 90%, #000701 90%);
+    color: white;
+}
+
+
+#results {
+    max-width: 70vw;
+    margin: 30px auto;
+    padding: 20px;
+    background: #d0d0d0fa;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    color: #222;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    padding: 8px 0;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+
+a:hover {
+    background-color: #002080;
+}
+
+.error {
+    color: red;
+    text-align: center;
+    font-weight: bold;
+}
+
+#graph-container {
+    max-width: 70vw;
+    height: 80%;
+    margin: 20px auto;
+    padding: 10px;
+    background: #1a2e35f0;
+    border-radius: 10px;
+}
+
+#graph-container h2 {
+    color: #fff;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+#graph {
+    width: 100%;
+    height: 80%;
+    background:  #c0c0c0f0;
+    padding: 0;
+    border-radius: 10px;
+}
+
+button {
+    width: 50px;
+    height: 50px;
+    margin: 0 10px;
+    background-color: #ff3333;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #cc0000;
+}

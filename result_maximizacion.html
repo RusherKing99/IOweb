@@ -1,0 +1,307 @@
+<!-- Archivo: result_maximizacion.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Resultados - Maximización</title>
+    <link rel="stylesheet" href="css/result.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
+    <!-- Incluir Plotly.js desde CDN -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        /* Opcional: Estilos para los botones de zoom */
+        #graph-container button {
+            width: 40px;
+            height: 40px;
+            font-size: 24px;
+            margin: 0 5px;
+            cursor: pointer;
+        }
+
+        #graph-container {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    
+    <img src="media/Logo.png" id="asdasd">
+
+    <div class="hero_area">
+        <!-- header section strats -->
+        <header class="header_section">
+          <div class="container-fluid">
+            <nav class="navbar navbar-expand-lg custom_nav-container">
+              <a class="navbar-brand" href="index.html">
+                <img src="images/logo.png" alt="" />
+                <span>
+                  Programacion lineal
+                </span>
+              </a>
+    
+              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                
+                  
+                
+              </div>
+              <span class="navbar-brand" id = "cls">
+                Resultados - Maximización
+              </span>
+            </nav>
+          </div>
+        </header>
+    </div>
+
+    <div id="results"></div>
+
+
+    <!-- Contenedor para el gráfico -->
+    <div id="graph-container">
+        <h2>Solución Gráfica</h2>
+        <div id="graph"></div>
+        <!-- Botones de Zoom -->
+        <div style="text-align: center; margin-top: 10px;">
+            <button id="zoom-in">+</button>
+            <button id="zoom-out">-</button>
+        </div>
+    </div>
+
+    <section class="info_section ">
+        <div class="info_container layout_padding-top">
+          <div class="container">
+            <div class="info_top">
+              <div class="info_logo">
+                <span>
+                  Informacion del equipo
+                </span>
+              </div>
+            </div>
+    
+            <div class="info_main">
+              <div class="row">
+                <div class="col-md-3 col-lg-3">
+                  <div class="info_link-box">
+                    <h5>
+                      Miembros del equipo
+                    </h5>
+                    <ul>
+                      Alvarado Condori Alan Manuel
+                      Balboa Quispe Rusell adolfo
+                      Beizaga Marquez Ricardo Andres
+                      Gomez Ramos Jose Guadalupe
+                      Quispe Mamani Juan Gabriel
+                      Nina Limachi Iván Omar
+  
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="col-md-3 col-lg-4">
+                  <h5>
+                    Titulo
+                  </h5>
+                  <p>
+                    Uso de investigacion operativa en un sitio web con todas las herramientas incluidas
+                  </p>
+                </div>
+    
+                <div class="col-md-3 col-lg-4 offset-lg-1">
+                  <h5>
+                    Objetivo
+                  </h5>
+                  <p>
+                    Desplegar una aplicacion web con funciones de programacion lineal
+                  </p>
+                </div>
+              </div>
+            </div>  
+          </div>
+        </div>
+      </section>
+
+    <!-- Vincular el archivo JavaScript de maximización -->
+    <script src="js/simplex_maximizacion.js"></script>
+    <script>
+        // Obtener datos guardados en localStorage
+        const data = JSON.parse(localStorage.getItem('lp_data'));
+
+        // Verificar si los datos existen
+        if (!data) {
+            document.getElementById('results').innerHTML = '<p class="error">No hay datos disponibles.</p>';
+            console.error("No hay datos en localStorage.");
+        } else {
+            try {
+                // Ejecutar el método Simplex para maximización
+                console.log("Datos ingresados:", data);
+                const result = simplexMaximizacion(data);
+
+                // Verificar que result contenga los datos esperados
+                if (!result || !result.solution || typeof result.optimalValue === 'undefined') {
+                    throw new Error("Resultado incompleto del algoritmo Simplex.");
+                }
+
+                // Mostrar los resultados en la página
+                console.log("Resultado final de maximización:", result);
+                displayResults(result, data);
+
+                // Si hay 2 variables, mostrar gráfico
+                if (data.numVars === 2) {
+                    plotGraph(result, data);
+                } else {
+                    // Ocultar el contenedor del gráfico si no hay 2 variables
+                    document.getElementById('graph-container').style.display = 'none';
+                }
+            } catch (error) {
+                document.getElementById('results').innerHTML = `<p class="error">Error: ${error.message}</p>`;
+                console.error("Error durante la ejecución de maximización:", error);
+            }
+        }
+
+        // Función para mostrar los resultados
+        function displayResults(result, data) {
+            let html = `<p><strong>Valor Óptimo:</strong> ${result.optimalValue.toFixed(2)}</p>`;
+            html += `<h2>Valores de las Variables:</h2>`;
+            html += `<ul>`;
+            result.solution.forEach((value, index) => {
+                html += `<li>X${index + 1} = ${value.toFixed(2)}</li>`;
+            });
+            html += `</ul>`;
+
+            html += `<h2>Función Objetivo:</h2>`;
+            html += `<p>Z = `;
+            data.objective.forEach((coef, index) => {
+                const sign = coef >= 0 && index > 0 ? '+' : '';
+                html += `${sign}${coef.toFixed(2)}×X${index + 1} `;
+            });
+            html += `</p>`;
+
+            html += `<h2>Restricciones:</h2>`;
+            data.constraints.forEach((constraint, index) => {
+                html += `<p>Restricción ${index + 1}: `;
+                constraint.coefficients.forEach((coef, idx) => {
+                    const sign = coef >= 0 && idx > 0 ? "+" : "";
+                    html += `${sign}${coef.toFixed(2)}×X${idx + 1} `;
+                });
+                // Usar el signo original de la restricción
+                const displaySign = constraint.sign === "<=" ? "&le;" : "&ge;";
+                html += `${displaySign} ${constraint.value.toFixed(2)}</p>`;
+            });
+
+            document.getElementById('results').innerHTML = html;
+        }
+
+        // Función para plotear el gráfico cuando hay 2 variables
+        function plotGraph(result, data) {
+            const constraints = data.constraints;
+            const objective = data.objective;
+            const solution = result.solution;
+
+            // Definir rangos para el gráfico
+            let xValues = [];
+            let yValues = [];
+            constraints.forEach(constraint => {
+                const coefX = constraint.coefficients[0];
+                const coefY = constraint.coefficients[1];
+                const value = constraint.value;
+
+                if (coefY !== 0) {
+                    const y = (value - coefX * 0) / coefY;
+                    yValues.push(y);
+                }
+                if (coefX !== 0) {
+                    const x = (value - coefY * 0) / coefX;
+                    xValues.push(x);
+                }
+            });
+
+            // Determinar límites del gráfico
+            const xMax = Math.max(...xValues, solution[0] * 1.5, 10 <= xValues[0] || 10 <= xValues[1]? 10 : xValues[0] > xValues[1]?xValues[0]+0.5 : xValues[1]+0.5);
+            const yMax = Math.max(...yValues, solution[1] * 1.5, 10 <= yValues[0] || 10 <= yValues[1]? 10 : yValues[0] > yValues[1]?yValues[0]+0.5 : yValues[1]+0.5);
+
+
+            // Crear trazados para las restricciones
+            let traces = [];
+            constraints.forEach((constraint, index) => {
+                const coefX = constraint.coefficients[0];
+                const coefY = constraint.coefficients[1];
+                const value = constraint.value;
+
+                // Para restricciones de <= o >=, graficar la línea
+                // Y sombrear el área factible
+                let x = [0, value / coefX];
+                let y = [value / coefY, 0];
+
+                traces.push({
+                    x: x,
+                    y: y,
+                    mode: 'lines',
+                    name: `Restricción ${index + 1}`,
+                    line: { dash: 'dash' }
+                });
+            });
+
+            // Trazado para la solución óptima
+            traces.push({
+                x: [solution[0]],
+                y: [solution[1]],
+                mode: 'markers',
+                name: 'Solución Óptima',
+                marker: { color: 'red', size: 10 }
+            });
+
+            // Trazado para la función objetivo
+            // Para mostrar cómo se ve la función objetivo en el gráfico
+            const objX = [0, (result.optimalValue / objective[0])];
+            const objY = [result.optimalValue / objective[1], 0];
+            traces.push({
+                x: objX,
+                y: objY,
+                mode: 'lines',
+                name: 'Función Objetivo',
+                line: { color: 'green' }
+            });
+
+            // Configuración del layout del gráfico
+            const layout = {
+                title: 'Solución Gráfica',
+                xaxis: { title: 'X1', range: [0, xMax], zeroline: true },
+                yaxis: { title: 'X2', range: [0, yMax], zeroline: true },
+                showlegend: true
+            };
+
+            // Configuración para ocultar la barra de herramientas predeterminada de Plotly
+            const config = {
+                displayModeBar: false
+            };
+
+            // Renderizar el gráfico con configuración para ocultar la barra de herramientas
+            Plotly.newPlot('graph', traces, layout, config);
+
+            // Añadir funcionalidad a los botones de zoom
+            document.getElementById('zoom-in').addEventListener('click', () => {
+                // Obtener los rangos actuales
+                Plotly.relayout('graph', {
+                    'xaxis.range[0]': layout.xaxis.range[0] * 0.8,
+                    'xaxis.range[1]': layout.xaxis.range[1] * 0.8,
+                    'yaxis.range[0]': layout.yaxis.range[0] * 0.8,
+                    'yaxis.range[1]': layout.yaxis.range[1] * 0.8
+                });
+            });
+
+            document.getElementById('zoom-out').addEventListener('click', () => {
+                // Obtener los rangos actuales
+                Plotly.relayout('graph', {
+                    'xaxis.range[0]': layout.xaxis.range[0] / 0.8,
+                    'xaxis.range[1]': layout.xaxis.range[1] / 0.8,
+                    'yaxis.range[0]': layout.yaxis.range[0] / 0.8,
+                    'yaxis.range[1]': layout.yaxis.range[1] / 0.8
+                });
+            });
+        }
+    </script>
+    <script src="js/jquery-3.4.1.min.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/custom.js"></script>
+</body>
+</html>

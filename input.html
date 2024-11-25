@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programación Lineal - Ingreso de Datos</title>
+    <link rel="stylesheet" href="css/input.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
+    
+</head>
+<body>
+  <img src="media/Logo.png" id="asdasd">
+    <div class="hero_area">
+        <!-- header section strats -->
+        <header class="header_section">
+          <div class="container-fluid">
+            <nav class="navbar navbar-expand-lg custom_nav-container">
+              <a class="navbar-brand" href="index.html">
+                <img src="images/logo.png" alt="" />
+                <span>
+                  Programacion lineal
+                </span>
+              </a>
+    
+              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                
+                  
+                
+              </div>
+              <span class="navbar-brand" id = "cls">
+                Ingreso de Datos
+              </span>
+            </nav>
+          </div>
+        </header>
+    </div>
+
+
+    <form id="input-form">
+        
+        <div id="objective-function"></div>
+
+        <h2>Restricciones</h2>
+        <div id="constraints"></div>
+
+        <button id = "btnsubmit" type="submit">Resolver</button>
+    </form>
+
+    <section class="info_section ">
+        <div class="info_container layout_padding-top">
+          <div class="container">
+            <div class="info_top">
+              <div class="info_logo">
+                <span>
+                  Informacion del equipo
+                </span>
+              </div>
+            </div>
+    
+            <div class="info_main">
+              <div class="row">
+                <div class="col-md-3 col-lg-3">
+                  <div class="info_link-box">
+                    <h5>
+                      Miembros del equipo
+                    </h5>
+                    <ul>
+                      Alvarado Condori Alan Manuel
+                      Balboa Quispe Rusell adolfo
+                      Beizaga Marquez Ricardo Andres
+                      Gomez Ramos Jose Guadalupe
+                      Quispe Mamani Juan Gabriel
+                      Nina Limachi Iván Omar
+  
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="col-md-3 col-lg-4">
+                  <h5>
+                    Titulo
+                  </h5>
+                  <p>
+                    Uso de investigacion operativa en un sitio web con todas las herramientas incluidas
+                  </p>
+                </div>
+    
+                <div class="col-md-3 col-lg-4 offset-lg-1">
+                  <h5>
+                    Objetivo
+                  </h5>
+                  <p>
+                    Desplegar una aplicacion web con funciones de programacion lineal
+                  </p>
+                </div>
+              </div>
+            </div>  
+          </div>
+        </div>
+      </section>
+
+    <script>
+        // Obtener los parámetros pasados por la URL
+        const params = new URLSearchParams(window.location.search);
+        const numVars = parseInt(params.get('numVars'));
+        const numConstraints = parseInt(params.get('numConstraints'));
+        const optimization = params.get('optimization');
+        
+        const formDiv = document.getElementById('input-form');
+        const c = formDiv.innerHTML
+        let objHTML = '<h2>Función Objetivo</h2><table id = "gg"><tr>';
+        for (let i = 0; i < numVars; i++) {
+            objHTML += `
+                <th>
+                    <label for="obj_coef_${i}"> <input class = "names" value = 'X${i + 1}'></label>
+                </th>
+            `;
+        }
+        objHTML += '</tr></table>';
+        formDiv.innerHTML = objHTML + c
+
+        // Crear campos para la función objetivo
+        const objectiveDiv = document.getElementById('objective-function');
+        
+        objHTML = '<table><tr>';
+        for (let i = 0; i < numVars; i++) {
+            objHTML += `
+                <td>
+                    <input type="number" id="obj_coef_${i}" step="any" name="obj_coef_${i}" required>
+                </td>
+            `;
+        }
+        objHTML += '</tr></table>';
+        objectiveDiv.innerHTML = objHTML;
+
+        // Crear campos para las restricciones
+        const constraintsDiv = document.getElementById('constraints');
+            let constrHTML = '<table>';
+        for (let i = 0; i < numConstraints; i++) {
+            constrHTML += '<tr>';
+            for (let j = 0; j < numVars; j++) {
+                constrHTML += `
+                    <td>
+                        <input type="number" step="any" name="constr_${i}_coef_${j}" required>
+                    </td>
+                `;
+            }
+            constrHTML += `
+                <td>
+                    <select name="constr_${i}_sign">
+                        <option value="<=">&le;</option>
+                        <option value=">=">&ge;</option>
+                    </select>
+                </td>
+                <td>
+                    <input type="number" step="any" name="constr_${i}_value" required>
+                </td>
+            `;
+            constrHTML += '</tr>';
+        }
+        constrHTML += '</table>';
+        constraintsDiv.innerHTML = constrHTML;
+
+        // Manejar el envío del formulario
+        document.getElementById('input-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const data = {
+                numVars,
+                numConstraints,
+                optimization,
+                objective: [],
+                constraints: []
+            };
+
+            // Capturar los coeficientes de la función objetivo
+            for (let i = 0; i < numVars; i++) {
+                data.objective.push(parseFloat(formData.get(`obj_coef_${i}`)));
+            }
+
+            // Capturar las restricciones
+            for (let i = 0; i < numConstraints; i++) {
+                const constraint = {
+                    coefficients: [],
+                    sign: formData.get(`constr_${i}_sign`),
+                    value: parseFloat(formData.get(`constr_${i}_value`))
+                };
+                for (let j = 0; j < numVars; j++) {
+                    constraint.coefficients.push(parseFloat(formData.get(`constr_${i}_coef_${j}`)));
+                }
+                data.constraints.push(constraint);
+            }
+
+            // Guardar datos en localStorage y redirigir a la página de resultados
+            const targetPage = optimization === 'Maximizar'
+                ? 'result_maximizacion.html'
+                : 'result_minimizacion.html';
+
+            localStorage.setItem('lp_data', JSON.stringify(data));
+            window.location.href = targetPage;
+        });
+    </script>
+    <script src="js/jquery-3.4.1.min.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/custom.js"></script>
+</body>
+</html>
+

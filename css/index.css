@@ -1,0 +1,72 @@
+/* Archivo: css/index.css 7ccf9e*/
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(to right, #000701 15%, #04180c 15%, #04180c 85%, #000701 85%);
+   
+    
+}
+
+h1 {
+    text-align: center;
+    padding: 20px;
+    background-color: rgba(8, 0, 85, 0.8);
+    color: #fff;
+    font-size: 36px;
+    text-transform: uppercase;
+}
+
+form {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    background: #1a2e35f0;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    
+}
+
+label {
+    display: block;
+    margin-bottom: 10px;
+    color: #fff;
+    font-weight: bold;
+}
+
+input{
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    margin-left: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    
+}
+
+select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+#btnsubmit {
+    width: 100%;
+    padding: 10px;
+    margin-top: 15px;
+    background-color: #176303;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #002080;
+}
+
